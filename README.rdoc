@@ -1,0 +1,7 @@
+= EW Customizations
+
+== EW Redmine My Page Queries
+
+Adds custom queries onto My Page screen
+Based on git://github.com/alvila/redmine_my_page_queries.git
+

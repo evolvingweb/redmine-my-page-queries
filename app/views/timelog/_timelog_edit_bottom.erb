@@ -1,0 +1,7 @@
+<% if time_entry.project.users.nil? || time_entry.project.users.empty? %>
+  <em><%= l(:label_no_data) %></em>
+<% else %>
+  <% user_options = time_entry.project.users.map {|p| [p.name, p.id]} %>
+  <% selected_user = time_entry.user.id || User.current.id %>
+  <p><%= select("user", "user_id", options_for_select(user_options, selected_user), :style => 'max-width: 95%;', :required => true) %>&nbsp;</p>
+<% end %>

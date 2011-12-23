@@ -1,0 +1,50 @@
+<%
+# see WikiController::load_pages_grouped_by_date_without_content()
+
+def local_methods(thing)
+  (thing.methods - Object.instance_methods).sort
+end
+
+pages = WikiPage.find :all, 
+  :select => "#{WikiPage.table_name}.*, #{WikiContent.table_name}.updated_on", 
+  :joins => "LEFT JOIN #{WikiContent.table_name} ON #{WikiContent.table_name}.page_id = #{WikiPage.table_name}.id", 
+  :order => "#{WikiContent.table_name}.updated_on DESC"
+pages_by_date = pages.group_by {|p| p.updated_on.to_date}
+pages_by_parent_id = pages.group_by(&:parent_id)
+%>
+
+<span style="display:inline-block"> <h3>Top 10 Most Recent Wiki Pages</h3></span>
+<span style="display:inline-block"> <%=link_to("more", {:controller => 'ew', :action => 'date_index' }) %></span>
+
+<table class="list issues">
+  <thead>
+    <tr>
+      <th>Page</th><th>Project</th><th>Updated On</th><th>Author</th>
+    </tr>
+  </thead>
+  <% i=0 %>
+<% pages[0,10].each do |page| %>
+  <%
+    if i % 2 == 0
+      trclass = "even"
+    else
+      trclass = "odd"
+    end
+  %>
+  <tr class="<%=trclass%>">
+    <td>
+    <%=link_to(h(page.pretty_title), {:controller => 'wiki', :action => 'show', :project_id => page.project, :id=> page.title}) %>
+    </td>
+    <td>
+    <%=link_to(h(page.project), {:controller => 'wiki', :action => 'date_index', :project_id => page.project }) %>
+    </td>
+    <td>
+      <%= page.content.updated_on.strftime("%I:%M%p  %Y-%m-%d") %>
+    </td>
+    <td>
+      <%= page.content.author %>
+    </td>
+  </tr>
+  <% i += 1 %>
+<% end %>
+</table>

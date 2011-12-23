@@ -1,0 +1,30 @@
+
+  <span style="display:inline-block"><a href="#" onclick="var ele = document.getElementById('<%= query_form_name %>'); if(ele.style.display=='none') { ele.style.display='' } else { ele.style.display='none' }">modify</a></span>
+<span style="display:inline-block"><%= link_to("more", :controller => 'issues',:action => 'index', :query_id => @query.id) %></span>
+<div style="display:none" id="<%= query_form_name %>">
+<% form_tag({:action => ""}, :id => "block-form") do %>
+<table>
+  <tr>
+    <td>
+       <label for="query">Query: </label>
+    </td>
+    <td>
+       <select name="query">
+        <% @sidebar_queries.each do |query| -%>
+         <option value="<%= h(query.id) %>" <% if @user.pref[:others][query_name][:id].to_i==query.id -%>selected="selected"<% end -%>><% if(query.project_id.to_i>0) -%><%= Project.visible.find(query.project_id.to_i).name + " > " %><% end -%><%= h(query.name) %></option>
+        <% end -%>
+       </select>
+    </td>
+    <td>
+       <label for="limit">Limit: </label>
+    </td>
+    <td>
+      <input type="text" size="4" maxlength="3" name="limit" value="<%= h(@user.pref[:others][query_name][:limit]) %>" />
+    </td>
+    <td colspan="3">
+      <input type="hidden" name="<%= query_name.to_s %>" value="true" /><input type="submit" value="<%= l(:button_save) %>" />
+    </td>
+   </tr>
+</table>
+<% end -%>
+</div>
