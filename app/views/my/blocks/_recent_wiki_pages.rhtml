@@ -1,16 +1,6 @@
 <%
-# see WikiController::load_pages_grouped_by_date_without_content()
-
-def local_methods(thing)
-  (thing.methods - Object.instance_methods).sort
-end
-
-pages = WikiPage.find :all, 
-  :select => "#{WikiPage.table_name}.*, #{WikiContent.table_name}.updated_on", 
-  :joins => "LEFT JOIN #{WikiContent.table_name} ON #{WikiContent.table_name}.page_id = #{WikiPage.table_name}.id", 
-  :order => "#{WikiContent.table_name}.updated_on DESC"
-pages_by_date = pages.group_by {|p| p.updated_on.to_date}
-pages_by_parent_id = pages.group_by(&:parent_id)
+#see WikiController::load_pages_for_index
+pages = WikiPage.with_updated_on.find :all, :order => "updated_on DESC", :limit => 10,:include => {:wiki => :project}
 %>
 
 <span style="display:inline-block"> <h3>Top 10 Most Recent Wiki Pages</h3></span>
