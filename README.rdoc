@@ -1,7 +1,8 @@
 = EW Customizations
 
-== EW Redmine My Page Queries
+This repository has been abandoned. We are now using the following in its place:
 
-Adds custom queries onto My Page screen
-Based on git://github.com/alvila/redmine_my_page_queries.git
-
+* https://github.com/evolvingweb/redmine_evolvingweb_extensions
+* https://github.com/evolvingweb/redmine_timesheet_log_user
+* https://github.com/evolvingweb/redmine_recent_wiki_pages
+* https://github.com/Undev/redmine_my_page_queries
